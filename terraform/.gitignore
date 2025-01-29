@@ -1,0 +1,8 @@
+# Ignore Terraform-generated files
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.exe
+*.lock.hcl
+remote-backend/.terraform/
+terraform/.terraform/
