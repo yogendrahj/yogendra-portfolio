@@ -42,6 +42,21 @@ resource "aws_iam_policy" "github_actions_policy" {
         Action   = ["s3:PutObject", "s3:DeleteObject", "s3:ListBucket"],
         Resource = ["arn:aws:s3:::yogendra-tech-portfolio", "arn:aws:s3:::yogendra-tech-portfolio/*"]
       },
+       {
+        Effect   = "Allow",
+        Action   = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket",
+          "s3:GetBucketLocation",
+          "s3:GetObjectVersion"
+        ],
+        Resource = [
+          "arn:aws:s3:::yogendra-portfolio-tf-state-backend",
+          "arn:aws:s3:::yogendra-portfolio-tf-state-backend/*"
+        ]
+      },
       {
         Effect   = "Allow",
         Action   = ["cloudfront:CreateInvalidation"],
