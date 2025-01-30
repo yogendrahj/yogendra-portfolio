@@ -18,7 +18,7 @@ resource "aws_iam_role" "github_actions_role" {
       Action = "sts:AssumeRoleWithWebIdentity",
       Condition = {
         "StringEquals" = {
-          "token.actions.githubusercontent.com:sub" = "repo:yogendrahj/yogendra-portfolio:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub" = "repo:yogendrahj/yogendra-portfolio:ref:refs/heads/*"
         }
       }
     }]
@@ -42,6 +42,24 @@ resource "aws_iam_policy" "github_actions_policy" {
         Effect   = "Allow",
         Action   = ["cloudfront:CreateInvalidation"],
         Resource = "arn:aws:cloudfront::216989108476:distribution/E23LBTV90KTZFY"
+      },
+      # DynamoDB Permissions for Terraform State Locking
+      {
+        Effect   = "Allow",
+        Action   = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:Scan",
+          "dynamodb:Query"
+        ],
+        Resource = "arn:aws:dynamodb:eu-west-2:216989108476:table/tf-state-lock"
+      },
+      # Allow GitHub Actions to Assume This Role
+      {
+        Effect = "Allow",
+        Action = ["sts:AssumeRoleWithWebIdentity"],
+        Resource = "*"
       }
     ]
   })
