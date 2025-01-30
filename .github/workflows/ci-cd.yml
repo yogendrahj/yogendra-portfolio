@@ -27,6 +27,18 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Configure AWS OIDC Role
+        run: |
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID" >> $GITHUB_ENV
+          echo "ROLE_ARN=arn:aws:iam::$AWS_ACCOUNT_ID:role/GitHubActionsOIDC" >> $GITHUB_ENV
+
+      - name: Set up AWS CLI with OIDC
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: eu-west-2
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
@@ -73,11 +85,11 @@ jobs:
           echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID" >> $GITHUB_ENV
           echo "ROLE_ARN=arn:aws:iam::$AWS_ACCOUNT_ID:role/GitHubActionsOIDC" >> $GITHUB_ENV
 
-      - name: Set up AWS CLI
+      - name: Set up AWS CLI with OIDC
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsOIDC
-          aws-region: us-east-1
+          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: eu-west-2
 
       - name: Get Terraform Outputs
         id: tf-outputs
