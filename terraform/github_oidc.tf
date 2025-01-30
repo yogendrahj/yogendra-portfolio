@@ -17,9 +17,13 @@ resource "aws_iam_role" "github_actions_role" {
       },
       Action = "sts:AssumeRoleWithWebIdentity",
       Condition = {
-        "StringEquals" = {
-          "token.actions.githubusercontent.com:sub" = "repo:yogendrahj/yogendra-portfolio:ref:refs/heads/*"
-        }
+        "StringLike": {
+            "token.actions.githubusercontent.com:sub": "repo:yogendrahj/yogendra-portfolio:*"
+    },
+        "ForAllValues:StringEquals": {
+            "token.actions.githubusercontent.com:iss": "https://token.actions.githubusercontent.com",
+            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+    }
       }
     }]
   })
