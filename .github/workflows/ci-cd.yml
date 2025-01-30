@@ -27,12 +27,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Configure AWS OIDC Role
-        run: |
-          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-          echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID" >> $GITHUB_ENV
-          echo "ROLE_ARN=arn:aws:iam::$AWS_ACCOUNT_ID:role/GitHubActionsOIDC" >> $GITHUB_ENV
+      - name: Get AWS Account ID
+        run: echo "AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)" >> $GITHUB_ENV
 
+      - name: Assume AWS OIDC Role
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/GitHubActionsOIDC
+          aws-region: eu-west-2
+          
       - name: Set up AWS CLI with OIDC
         uses: aws-actions/configure-aws-credentials@v3
         with:
@@ -79,11 +82,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Configure AWS OIDC Role
-        run: |
-          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-          echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID" >> $GITHUB_ENV
-          echo "ROLE_ARN=arn:aws:iam::$AWS_ACCOUNT_ID:role/GitHubActionsOIDC" >> $GITHUB_ENV
+      - name: Get AWS Account ID
+        run: echo "AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)" >> $GITHUB_ENV
+
+      - name: Assume AWS OIDC Role
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/GitHubActionsOIDC
+          aws-region: eu-west-2
 
       - name: Set up AWS CLI with OIDC
         uses: aws-actions/configure-aws-credentials@v3
