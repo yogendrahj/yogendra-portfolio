@@ -17,9 +17,13 @@ resource "aws_iam_role" "github_actions_role" {
       },
       Action = "sts:AssumeRoleWithWebIdentity",
       Condition = {
-        "StringEquals" = {
-          "token.actions.githubusercontent.com:sub" = "repo:yogendrahj/yogendra-portfolio:ref:refs/heads/main"
-        }
+        "StringLike": {
+            "token.actions.githubusercontent.com:sub": "repo:yogendrahj/yogendra-portfolio:*"
+    },
+        "ForAllValues:StringEquals": {
+            "token.actions.githubusercontent.com:iss": "https://token.actions.githubusercontent.com",
+            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+    }
       }
     }]
   })
@@ -38,10 +42,43 @@ resource "aws_iam_policy" "github_actions_policy" {
         Action   = ["s3:PutObject", "s3:DeleteObject", "s3:ListBucket"],
         Resource = ["arn:aws:s3:::yogendra-tech-portfolio", "arn:aws:s3:::yogendra-tech-portfolio/*"]
       },
+       {
+        Effect   = "Allow",
+        Action   = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket",
+          "s3:GetBucketLocation",
+          "s3:GetObjectVersion"
+        ],
+        Resource = [
+          "arn:aws:s3:::yogendra-portfolio-tf-state-backend",
+          "arn:aws:s3:::yogendra-portfolio-tf-state-backend/*"
+        ]
+      },
       {
         Effect   = "Allow",
         Action   = ["cloudfront:CreateInvalidation"],
         Resource = "arn:aws:cloudfront::216989108476:distribution/E23LBTV90KTZFY"
+      },
+      # DynamoDB Permissions for Terraform State Locking
+      {
+        Effect   = "Allow",
+        Action   = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:Scan",
+          "dynamodb:Query"
+        ],
+        Resource = "arn:aws:dynamodb:eu-west-2:216989108476:table/tf-state-lock"
+      },
+      # Allow GitHub Actions to Assume This Role
+      {
+        Effect = "Allow",
+        Action = ["sts:AssumeRoleWithWebIdentity"],
+        Resource = "*"
       }
     ]
   })
