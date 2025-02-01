@@ -85,11 +85,16 @@ jobs:
           role-to-assume: arn:aws:iam::216989108476:role/GitHubActionsOIDC
           aws-region: eu-west-2
 
-      - name: Set up AWS CLI with OIDC
-        uses: aws-actions/configure-aws-credentials@v3
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
-          role-to-assume: arn:aws:iam::216989108476:role/GitHubActionsOIDC
-          aws-region: eu-west-2
+          terraform_version: 1.4.0
+
+      # - name: Set up AWS CLI with OIDC
+      #   uses: aws-actions/configure-aws-credentials@v3
+      #   with:
+      #     role-to-assume: arn:aws:iam::216989108476:role/GitHubActionsOIDC
+      #     aws-region: eu-west-2
 
       - name: Get Terraform Outputs
         id: tf-outputs
@@ -100,6 +105,10 @@ jobs:
 
       - name: Sync Website to S3
         run: |
+          if [ -z "$S3_BUCKET_NAME" ]; then
+            echo "Error: S3_BUCKET_NAME is not set"
+            exit 1
+          fi
           aws s3 sync ./website s3://$S3_BUCKET_NAME --delete
         if: github.ref == 'refs/heads/main'
 
