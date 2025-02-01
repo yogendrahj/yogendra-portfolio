@@ -69,7 +69,8 @@ resource "aws_iam_policy" "github_actions_policy" {
         ]
         Resource = [
           "arn:aws:iam::216989108476:role/GitHubActionsOIDC",
-          "arn:aws:s3:::yogendra-tech-portfolio"
+          "arn:aws:s3:::yogendra-tech-portfolio",
+          "arn:aws:s3:::yogendra-tech-portfolio/*"
         ]
       },
        {
@@ -99,7 +100,7 @@ resource "aws_iam_policy" "github_actions_policy" {
       },
       {
         Effect   = "Allow",
-        Action   = ["cloudfront:CreateInvalidation"],
+        Action   = ["cloudfront:*"],
         Resource = "arn:aws:cloudfront::216989108476:distribution/E23LBTV90KTZFY"
       },
       # DynamoDB Permissions for Terraform State Locking
