@@ -54,7 +54,9 @@ resource "aws_iam_policy" "github_actions_policy" {
         ],
         Resource = [
           "arn:aws:s3:::yogendra-tech-portfolio",
-          "arn:aws:s3:::yogendra-tech-portfolio/*"
+          "arn:aws:s3:::yogendra-tech-portfolio/*",
+          "arn:aws:s3:::yogendra-portfolio-tf-state-backend",
+          "arn:aws:s3:::yogendra-portfolio-tf-state-backend/*"
         ]
       },
       {
