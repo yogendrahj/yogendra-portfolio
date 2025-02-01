@@ -53,6 +53,8 @@ resource "aws_iam_policy" "github_actions_policy" {
           "s3:GetObjectVersion"
         ],
         Resource = [
+          "arn:aws:s3:::yogendra-tech-portfolio",
+          "arn:aws:s3:::yogendra-tech-portfolio/*",
           "arn:aws:s3:::yogendra-portfolio-tf-state-backend",
           "arn:aws:s3:::yogendra-portfolio-tf-state-backend/*"
         ]
