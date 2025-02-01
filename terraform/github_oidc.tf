@@ -38,6 +38,18 @@ resource "aws_iam_policy" "github_actions_policy" {
     Version = "2012-10-17",
     Statement = [
       {
+        "Effect": "Allow",
+        "Action": [
+          "iam:GetRole",
+          "iam:PassRole",
+          "iam:GetPolicyVersion",
+          "iam:ListPolicies",
+          "iam:ListRoles"
+        ],
+        "Resource": "*"
+      },
+
+      {
         Effect   = "Allow",
         Action   = [
           "iam:GetOpenIDConnectProvider",
@@ -65,6 +77,13 @@ resource "aws_iam_policy" "github_actions_policy" {
           "arn:aws:s3:::yogendra-portfolio-tf-state-backend",
           "arn:aws:s3:::yogendra-portfolio-tf-state-backend/*"
         ]
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "s3:GetBucketAcl"
+        ],
+        "Resource": "arn:aws:s3:::yogendra-tech-portfolio"
       },
       {
         Effect   = "Allow",
