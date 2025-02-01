@@ -67,7 +67,8 @@ resource "aws_iam_policy" "github_actions_policy" {
           "iam:ListAttachedRolePolicies",
           "s3:GetBucketCORS",
           "s3:GetBucketWebsite",
-          "s3:GetBucketVersioning"
+          "s3:GetBucketVersioning",
+          "s3:GetAccelerateConfiguration"
         ]
         Resource = [
           "arn:aws:iam::216989108476:role/GitHubActionsOIDC",
