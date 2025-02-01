@@ -1,5 +1,5 @@
 output "s3_bucket_name" {
-  value = aws_s3_bucket.dev_s3.id
+  value = aws_s3_bucket.dev_s3.bucket
 }
 
 output "cloudfront_distribution_id" {
