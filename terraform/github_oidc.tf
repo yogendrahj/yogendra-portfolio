@@ -60,6 +60,14 @@ resource "aws_iam_policy" "github_actions_policy" {
           "arn:aws:iam::216989108476:policy/GitHubActionsS3CloudFrontPolicy"
         ]
       },
+      {
+        Effect   = "Allow"
+        Action   = ["iam:ListRolePolicies", "s3:GetBucketCORS"]
+        Resource = [
+          "arn:aws:iam::216989108476:role/GitHubActionsOIDC",
+          "arn:aws:s3:::yogendra-tech-portfolio"
+        ]
+      },
        {
         Effect   = "Allow",
         Action   = [
