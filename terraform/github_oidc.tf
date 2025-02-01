@@ -39,12 +39,19 @@ resource "aws_iam_policy" "github_actions_policy" {
     Statement = [
       {
         Effect   = "Allow",
-        Action   = ["s3:PutObject", "s3:DeleteObject", "s3:ListBucket"],
-        Resource = ["arn:aws:s3:::yogendra-tech-portfolio", "arn:aws:s3:::yogendra-tech-portfolio/*"]
+        Action   = [
+          "iam:GetOpenIDConnectProvider",
+          "iam:GetPolicy"
+        ],
+        Resource = [
+          "arn:aws:iam::216989108476:oidc-provider/token.actions.githubusercontent.com",
+          "arn:aws:iam::216989108476:policy/GitHubActionsS3CloudFrontPolicy"
+        ]
       },
        {
         Effect   = "Allow",
         Action   = [
+          "s3:GetBucketPolicy",
           "s3:GetObject",
           "s3:PutObject",
           "s3:DeleteObject",
